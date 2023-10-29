@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
     QMainWindow,
     QGridLayout,
     QGroupBox,
@@ -74,23 +74,23 @@ class WorldPropertiesPanel(QGroupBox):
 
         layout = QGridLayout()
         layout.addWidget(
-            QLabel("Define world", alignment=Qt.AlignCenter), 0, 0, 1, 2
+            QLabel("Define world", alignment=Qt.AlignmentFlag.AlignCenter), 0, 0, 1, 2
         )
-        layout.addWidget(QLabel("Height", alignment=Qt.AlignCenter), 1, 0)
-        layout.addWidget(QLabel("Width", alignment=Qt.AlignCenter), 1, 1)
+        layout.addWidget(QLabel("Height", alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
+        layout.addWidget(QLabel("Width", alignment=Qt.AlignmentFlag.AlignCenter), 1, 1)
         self.height_box = QLineEdit(
-            f"{self._world._height}", alignment=Qt.AlignCenter
+            f"{self._world._height}", alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.height_box.editingFinished.connect(self._height_changed)
         self.width_box = QLineEdit(
-            f"{self._world._width}", alignment=Qt.AlignCenter
+            f"{self._world._width}", alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.width_box.editingFinished.connect(self._width_changed)
         layout.addWidget(self.height_box, 2, 0)
         layout.addWidget(self.width_box, 2, 1)
         layout.addWidget(QLabel(), 3, 0)
         layout.addWidget(
-            QLabel("Choose boundary condition", alignment=Qt.AlignCenter), 4, 0, 1, 2
+            QLabel("Choose boundary condition", alignment=Qt.AlignmentFlag.AlignCenter), 4, 0, 1, 2
         )
         self.bc_box = QComboBox()
         self.bc_box.addItems(["Hard wall", "Periodic"])
