@@ -25,6 +25,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 class GameWindow(QWidget):
     def __init__(self, world):
         super().__init__()
+        self.setWindowTitle("Game of Life")
         layout = QGridLayout()
         self._world = world
         self._create_mpl_figure()
@@ -58,6 +59,7 @@ class GameWindow(QWidget):
 class CreateStateWindow(QWidget):
     def __init__(self, grid):
         super().__init__()
+        self.setWindowTitle("Create initial state")
         self._grid = grid
         layout = QGridLayout()
         self._create_mpl_figure()
@@ -253,7 +255,7 @@ class GameRulesPanel(QGroupBox):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Game of Life")
+        self.setWindowTitle("Game of Life setup")
         self.resize(600, 400)
 
         self.world = World()
