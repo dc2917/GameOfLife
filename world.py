@@ -1,3 +1,5 @@
+import numpy as np
+
 class World:
     def __init__(
         self,
@@ -42,3 +44,18 @@ class World:
 
     def set_tick(self, tick) -> None:
         self._tick = tick
+
+    def outcome(self, is_alive, num_live_neighbours):
+        if is_alive:
+            if num_live_neighbours == self._rules[0] or num_live_neighbours == self._rules[1]:
+                return 1
+            else:
+                return 0
+        else:
+            if num_live_neighbours == self._rules[2]:
+                return 1
+            else:
+                return 0
+
+    def count_live_neighbours(self, neighbourhood):
+        return np.sum(neighbourhood) - neighbourhood[1, 1]

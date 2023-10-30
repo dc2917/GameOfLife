@@ -26,10 +26,10 @@ class GameWindow(QWidget):
             for i in range(1, ni - 1):  # go across each row
                 for j in range(1, nj - 1):  # go down each column
                     neighbourhood = copy[i - 1 : i + 2, j - 1 : j + 2]
-                    num_live_neighbours = self._world._grid.count_live_neighbours(
+                    num_live_neighbours = self._world.count_live_neighbours(
                         neighbourhood
                     )
-                    self._world._grid._cells[i, j] = self._world._grid.outcome(
+                    self._world._grid._cells[i, j] = self._world.outcome(
                         copy[i, j], num_live_neighbours
                     )
             if not np.any(self._world._grid._cells - copy):

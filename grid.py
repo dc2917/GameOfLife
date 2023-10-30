@@ -37,17 +37,3 @@ class Grid:
     def plot(self):
         return plt.pcolor(self.cells(), cmap="binary")
 
-    def outcome(self, is_alive, num_live_neighbours):
-        if is_alive:
-            if num_live_neighbours == 2 or num_live_neighbours == 3:
-                return 1
-            else:
-                return 0
-        else:
-            if num_live_neighbours == 3:
-                return 1
-            else:
-                return 0
-
-    def count_live_neighbours(self, neighbourhood):
-        return np.sum(neighbourhood) - neighbourhood[1, 1]
