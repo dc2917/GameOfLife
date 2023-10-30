@@ -1,12 +1,15 @@
-import sys
+"""The main entry point to GameOfLife."""
 
-from PyQt6.QtWidgets import QApplication
+if __name__ == "__main__":
+    import sys
 
-from configwindow import MainWindow
+    from PyQt6.QtWidgets import QApplication
 
-app = QApplication(sys.argv)
+    from configwindow import MainWindow
 
-window = MainWindow()
-window.show()
+    app = QApplication(sys.argv)
 
-sys.exit(app.exec())
+    window = MainWindow()
+    window.show()
+
+    sys.exit(app.exec())
