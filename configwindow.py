@@ -42,12 +42,16 @@ class GameWindow(QWidget):
         finished = False
         while not finished:
             copy = self._world._grid._cells.copy()
-            for i in range(1, ni-1):  # go across each row
-                for j in range(1, nj-1):  # go down each column
-                    neighbourhood = copy[i-1:i+2, j-1:j+2]
-                    num_live_neighbours = self._world._grid.count_live_neighbours(neighbourhood)
-                    self._world._grid._cells[i, j] = self._world._grid.outcome(copy[i, j], num_live_neighbours)
-            if not np.any(self._world._grid._cells-copy):
+            for i in range(1, ni - 1):  # go across each row
+                for j in range(1, nj - 1):  # go down each column
+                    neighbourhood = copy[i - 1 : i + 2, j - 1 : j + 2]
+                    num_live_neighbours = self._world._grid.count_live_neighbours(
+                        neighbourhood
+                    )
+                    self._world._grid._cells[i, j] = self._world._grid.outcome(
+                        copy[i, j], num_live_neighbours
+                    )
+            if not np.any(self._world._grid._cells - copy):
                 finished = True
             else:
                 self._im.set_data(self._world._grid._cells)
@@ -126,7 +130,11 @@ class WorldPropertiesPanel(QGroupBox):
         layout.addWidget(self.width_box, 2, 1)
         layout.addWidget(QLabel(), 3, 0)
         layout.addWidget(
-            QLabel("Choose boundary condition", alignment=Qt.AlignmentFlag.AlignCenter), 4, 0, 1, 2
+            QLabel("Choose boundary condition", alignment=Qt.AlignmentFlag.AlignCenter),
+            4,
+            0,
+            1,
+            2,
         )
         self.bc_box = QComboBox()
         self.bc_box.addItems(["Hard wall", "Periodic"])
@@ -144,7 +152,9 @@ class WorldPropertiesPanel(QGroupBox):
             self._world.set_height(new_height)
             if self._world._grid is not None:
                 if self._world._grid._ny != new_height:
-                    self._world._grid._cells = np.zeros((int(self._world._width), new_height))
+                    self._world._grid._cells = np.zeros(
+                        (int(self._world._width), new_height)
+                    )
                     self._world._grid._ny = new_height
 
     def _width_changed(self):
@@ -156,7 +166,9 @@ class WorldPropertiesPanel(QGroupBox):
             self._world.set_width(new_width)
             if self._world._grid is not None:
                 if self._world._grid._nx != new_width:
-                    self._world._grid._cells = np.zeros((new_width, int(self._world._height)))
+                    self._world._grid._cells = np.zeros(
+                        (new_width, int(self._world._height))
+                    )
                     self._world._grid._nx = new_width
 
     def _bc_changed(self):
@@ -189,7 +201,11 @@ class InitialConditionsPanel(QGroupBox):
 
     def _random_state_toggled(self):
         if self.cbox.isChecked():
-            grid = Grid(cells=np.random.randint(0, 2, (int(self._world._width), int(self._world._height))))
+            grid = Grid(
+                cells=np.random.randint(
+                    0, 2, (int(self._world._width), int(self._world._height))
+                )
+            )
             self._world.set_grid(grid)
 
     def open_state(self):
@@ -204,7 +220,11 @@ class InitialConditionsPanel(QGroupBox):
 
     def create_state(self):
         if self._world._grid is None:
-            self._world.set_grid(Grid(cells=np.zeros((int(self._world._width), int(self._world._height)))))
+            self._world.set_grid(
+                Grid(
+                    cells=np.zeros((int(self._world._width), int(self._world._height)))
+                )
+            )
         self.create_state_window = CreateStateWindow(self._world._grid)
 
 
@@ -237,10 +257,16 @@ class GameRulesPanel(QGroupBox):
         self.setLayout(layout)
 
     def _rules_changed(self):
-        if int(self.tbox1.text()) <= 0 or int(self.tbox2.text()) <= 0 or int(self.tbox3.text()) <= 0:
+        if (
+            int(self.tbox1.text()) <= 0
+            or int(self.tbox2.text()) <= 0
+            or int(self.tbox3.text()) <= 0
+        ):
             print("invalid")
         else:
-            self._world.set_rules([int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())])
+            self._world.set_rules(
+                [int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())]
+            )
 
     def _use_default_rules(self, val) -> None:
         self.tbox1.setEnabled(not val)

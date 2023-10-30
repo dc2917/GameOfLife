@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-class Grid():
+class Grid:
     def __init__(self, cells=None, nx=0, ny=0):
         if cells is None:
             self._cells = np.zeros([nx, ny])
@@ -35,7 +35,7 @@ class Grid():
         self._cells.fill(0)
 
     def plot(self):
-        return plt.pcolor(self.cells(), cmap='binary')
+        return plt.pcolor(self.cells(), cmap="binary")
 
     def outcome(self, is_alive, num_live_neighbours):
         if is_alive:
