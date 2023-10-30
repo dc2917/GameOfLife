@@ -95,7 +95,6 @@ class CreateStateWindow(QWidget):
         fname, _ = QFileDialog().getSaveFileName(self)
         if fname == "":
             return
-        print("Saving state", fname)
         np.savetxt(fname, self._im.get_array(), fmt="%d")
 
     def _reset_clicked(self):
@@ -262,7 +261,7 @@ class GameRulesPanel(QGroupBox):
             or int(self.tbox2.text()) <= 0
             or int(self.tbox3.text()) <= 0
         ):
-            print("invalid")
+            QMessageBox(text="Invalid").exec()
         else:
             self._world.set_rules(
                 [int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())]
@@ -330,8 +329,6 @@ class MainWindow(QMainWindow):
             self.world.set_tick(new_tick)
 
     def _play_clicked(self):
-        # begin_gol()
-        print("play clicked")
         print("Using the following settings:")
         print(f"{self.world._height} height")
         print(f"{self.world._width} width")
