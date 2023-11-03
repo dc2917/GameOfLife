@@ -148,11 +148,11 @@ class InitialConditionsPanel(QGroupBox):
         sublayout = QHBoxLayout()
         sublayout_wid = QWidget()
 
-        self.cbox = QCheckBox("Random seed")
+        self.cbox = QCheckBox("Random state")
         self.cbox.stateChanged.connect(self._random_state_toggled)
-        cs_btn = QPushButton("Create seed")
+        cs_btn = QPushButton("Create state")
         cs_btn.clicked.connect(self.create_state)
-        ls_btn = QPushButton("Load seed")
+        ls_btn = QPushButton("Load state")
         ls_btn.clicked.connect(self.open_state)
 
         layout.addWidget(self.cbox)
