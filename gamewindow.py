@@ -23,8 +23,8 @@ class GameWindow(QWidget):
         finished = False
         while not finished:
             copy = self._world._grid._cells.copy()
-            for i in range(1, ni - 1):  # go across each row
-                for j in range(1, nj - 1):  # go down each column
+            for i in range(1, ni - 1):  # go down each column
+                for j in range(1, nj - 1):  # go across each row
                     neighbourhood = copy[i - 1 : i + 2, j - 1 : j + 2]
                     num_live_neighbours = self._world.count_live_neighbours(
                         neighbourhood
