@@ -111,7 +111,7 @@ class WorldPropertiesPanel(QGroupBox):
         new_height = int(self.height_box.text())
         if new_height <= 0:
             QMessageBox(text="Height must be greater than 0.").exec()
-            self.height_box.setText("1")
+            self.height_box.setText(f"{self._world._height}")
         else:
             self._world.set_height(new_height)
             if self._world._grid is not None:
@@ -125,7 +125,7 @@ class WorldPropertiesPanel(QGroupBox):
         new_width = int(self.width_box.text())
         if new_width <= 0:
             QMessageBox(text="Width must be greater than 0.").exec()
-            self.width_box.setText("1")
+            self.width_box.setText(f"{self._world._width}")
         else:
             self._world.set_width(new_width)
             if self._world._grid is not None:
@@ -290,6 +290,7 @@ class MainWindow(QMainWindow):
         new_tick = float(self.t_tbox.text())
         if new_tick <= 0:
             QMessageBox(text="Tick length must be greater than 0.").exec()
+            self.t_tbox.setText(f"{self.world._tick}")
         else:
             self.world.set_tick(new_tick)
 
