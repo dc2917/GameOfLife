@@ -267,7 +267,7 @@ class MainWindow(QMainWindow):
         tp_sublayout = QHBoxLayout()
         tp_sublayout_wid = QWidget()
 
-        self.t_tbox = QLineEdit("0.1")
+        self.t_tbox = QLineEdit(f"{self.world._tick}")
         self.t_tbox.editingFinished.connect(self._tick_changed)
         tp_sublayout.addWidget(QLabel("Set tick"))
         tp_sublayout.addWidget(self.t_tbox)
