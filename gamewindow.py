@@ -19,20 +19,21 @@ class GameWindow(QWidget):
 
     def run(self):
         ni, nj = self._world._height, self._world._width
+        world = np.zeros((ni+2, nj+2), dtype=int)
         plt.pause(self._world._tick)
         finished = False
         while not finished:
-            copy = self._world._grid._cells.copy()
-            for i in range(1, ni - 1):  # go down each column
-                for j in range(1, nj - 1):  # go across each row
-                    neighbourhood = copy[i - 1 : i + 2, j - 1 : j + 2]
+            world[1:-1, 1:-1] = self._world._grid._cells
+            for i in range(1, ni+1):  # go down each column
+                for j in range(1, nj+1):  # go across each row
+                    neighbourhood = world[i - 1 : i + 2, j - 1 : j + 2]
                     num_live_neighbours = self._world.count_live_neighbours(
                         neighbourhood
                     )
-                    self._world._grid._cells[i, j] = self._world.outcome(
-                        copy[i, j], num_live_neighbours
+                    self._world._grid._cells[i-1, j-1] = self._world.outcome(
+                        world[i, j], num_live_neighbours
                     )
-            if not np.any(self._world._grid._cells - copy):
+            if not np.any(self._world._grid._cells - world[1:-1, 1:-1]):
                 finished = True
             else:
                 self._im.set_data(self._world._grid._cells)
