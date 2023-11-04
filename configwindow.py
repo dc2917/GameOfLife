@@ -110,7 +110,7 @@ class WorldPropertiesPanel(QGroupBox):
     def _height_changed(self):
         new_height = int(self.height_box.text())
         if new_height <= 0:
-            QMessageBox(text="Invalid").exec()
+            QMessageBox(text="Height must be greater than 0.").exec()
             self.height_box.setText("1")
         else:
             self._world.set_height(new_height)
@@ -124,7 +124,7 @@ class WorldPropertiesPanel(QGroupBox):
     def _width_changed(self):
         new_width = int(self.width_box.text())
         if new_width <= 0:
-            QMessageBox(text="Invalid").exec()
+            QMessageBox(text="Width must be greater than 0.").exec()
             self.width_box.setText("1")
         else:
             self._world.set_width(new_width)
@@ -226,7 +226,7 @@ class GameRulesPanel(QGroupBox):
             or int(self.tbox2.text()) <= 0
             or int(self.tbox3.text()) <= 0
         ):
-            QMessageBox(text="Invalid").exec()
+            QMessageBox(text="Number of neighbours must be greater than or equal to 0.").exec()
         else:
             self._world.set_rules(
                 [int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())]
@@ -289,7 +289,7 @@ class MainWindow(QMainWindow):
     def _tick_changed(self):
         new_tick = float(self.t_tbox.text())
         if new_tick <= 0:
-            QMessageBox(text="Invalid").exec()
+            QMessageBox(text="Tick length must be greater than 0.").exec()
         else:
             self.world.set_tick(new_tick)
 
