@@ -179,6 +179,7 @@ class InitialConditionsPanel(QGroupBox):
         cells = np.loadtxt(fname, dtype=int)
         grid = Grid(cells=cells)
         self._world.set_grid(grid)
+        self.cbox.setChecked(False)
         self.parent().parent().wp.height_box.setText(f"{grid._ny}")
         self.parent().parent().wp.width_box.setText(f"{grid._nx}")
 
