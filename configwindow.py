@@ -50,9 +50,9 @@ class CreateStateWindow(QWidget):
     def _on_canvas_clicked(self, event):
         if event.inaxes is self._im.axes:
             data = self._im.get_array()
-            i, j = int(event.xdata + 0.5), int(event.ydata + 0.5)
-            data[j, i] = not data[j, i]
-            self._grid._cells[j, i] = not self._grid._cells[j, i]
+            j, i = int(event.xdata + 0.5), int(event.ydata + 0.5)
+            data[i, j] = not data[i, j]
+            self._grid._cells[i, j] = not self._grid._cells[i, j]
             self._im.set_array(data)
             event.canvas.draw()
 
@@ -117,7 +117,7 @@ class WorldPropertiesPanel(QGroupBox):
             if self._world._grid is not None:
                 if self._world._grid._ny != new_height:
                     self._world._grid._cells = np.zeros(
-                        (int(self._world._width), new_height)
+                        (new_height, int(self._world._width))
                     )
                     self._world._grid._ny = new_height
 
@@ -131,7 +131,7 @@ class WorldPropertiesPanel(QGroupBox):
             if self._world._grid is not None:
                 if self._world._grid._nx != new_width:
                     self._world._grid._cells = np.zeros(
-                        (new_width, int(self._world._height))
+                        (int(self._world._height), new_width)
                     )
                     self._world._grid._nx = new_width
 
@@ -167,7 +167,7 @@ class InitialConditionsPanel(QGroupBox):
         if self.cbox.isChecked():
             grid = Grid(
                 cells=np.random.randint(
-                    0, 2, (int(self._world._width), int(self._world._height))
+                    0, 2, (int(self._world._height), int(self._world._width))
                 )
             )
             self._world.set_grid(grid)
@@ -186,7 +186,7 @@ class InitialConditionsPanel(QGroupBox):
         if self._world._grid is None:
             self._world.set_grid(
                 Grid(
-                    cells=np.zeros((int(self._world._width), int(self._world._height)))
+                    cells=np.zeros((int(self._world._height), int(self._world._width)))
                 )
             )
         self.create_state_window = CreateStateWindow(self._world._grid)

@@ -5,13 +5,13 @@ import matplotlib.pyplot as plt
 class Grid:
     def __init__(self, cells=None, nx=0, ny=0):
         if cells is None:
-            self._cells = np.zeros([nx, ny])
+            self._cells = np.zeros([ny, nx])
             self._nx = nx
             self._ny = ny
         else:
             self._cells = cells
             # can't also specify nx and ny unless they are same as size of cells
-            self._nx, self._ny = np.shape(cells)
+            self._ny, self._nx = np.shape(cells)
 
     def cells(self):
         return self._cells

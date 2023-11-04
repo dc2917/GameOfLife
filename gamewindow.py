@@ -18,7 +18,7 @@ class GameWindow(QWidget):
         self._im = ax.imshow(self._world._grid.cells(), cmap="binary", vmin=0, vmax=1)
 
     def run(self):
-        ni, nj = self._world._width, self._world._height
+        ni, nj = self._world._height, self._world._width
         plt.pause(self._world._tick)
         finished = False
         while not finished:
