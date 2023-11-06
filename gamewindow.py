@@ -24,6 +24,11 @@ class GameWindow(QWidget):
         finished = False
         while not finished:
             world[1:-1, 1:-1] = self._world._grid._cells
+            if self._world._bc == "Periodic":
+                world[1:-1, 0] = self._world._grid._cells[:, -1]
+                world[1:-1, -1] = self._world._grid._cells[:, 0]
+                world[0, :] = world[-2, :]
+                world[-1, :] = world[1, :]
             for i in range(1, ni+1):  # go down each column
                 for j in range(1, nj+1):  # go across each row
                     neighbourhood = world[i - 1 : i + 2, j - 1 : j + 2]
