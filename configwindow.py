@@ -83,11 +83,11 @@ class WorldPropertiesPanel(QGroupBox):
         layout.addWidget(QLabel("Height", alignment=Qt.AlignmentFlag.AlignCenter), 1, 0)
         layout.addWidget(QLabel("Width", alignment=Qt.AlignmentFlag.AlignCenter), 1, 1)
         self.height_box = QLineEdit(
-            f"{self._world._height}", alignment=Qt.AlignmentFlag.AlignCenter
+            f"{self._world.height}", alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.height_box.editingFinished.connect(self._height_changed)
         self.width_box = QLineEdit(
-            f"{self._world._width}", alignment=Qt.AlignmentFlag.AlignCenter
+            f"{self._world.width}", alignment=Qt.AlignmentFlag.AlignCenter
         )
         self.width_box.editingFinished.connect(self._width_changed)
         layout.addWidget(self.height_box, 2, 0)
@@ -111,32 +111,32 @@ class WorldPropertiesPanel(QGroupBox):
         new_height = int(self.height_box.text())
         if new_height <= 0:
             QMessageBox(text="Height must be greater than 0.").exec()
-            self.height_box.setText(f"{self._world._height}")
+            self.height_box.setText(f"{self._world.height}")
         else:
-            self._world.set_height(new_height)
-            if self._world._grid is not None:
-                if self._world._grid.ny != new_height:
-                    self._world._grid.cells = np.zeros(
-                        (new_height, int(self._world._width))
+            self._world.height = new_height
+            if self._world.grid is not None:
+                if self._world.grid.ny != new_height:
+                    self._world.grid.cells = np.zeros(
+                        (new_height, int(self._world.width))
                     )
-                    self._world._grid.ny = new_height
+                    self._world.grid.ny = new_height
 
     def _width_changed(self):
         new_width = int(self.width_box.text())
         if new_width <= 0:
             QMessageBox(text="Width must be greater than 0.").exec()
-            self.width_box.setText(f"{self._world._width}")
+            self.width_box.setText(f"{self._world.width}")
         else:
-            self._world.set_width(new_width)
-            if self._world._grid is not None:
-                if self._world._grid.nx != new_width:
-                    self._world._grid.cells = np.zeros(
-                        (int(self._world._height), new_width)
+            self._world.width = new_width
+            if self._world.grid is not None:
+                if self._world.grid.nx != new_width:
+                    self._world.grid.cells = np.zeros(
+                        (int(self._world.height), new_width)
                     )
-                    self._world._grid.nx = new_width
+                    self._world.grid.nx = new_width
 
     def _bc_changed(self):
-        self._world.set_bc(self.bc_box.currentText())
+        self._world.bc = self.bc_box.currentText()
 
 
 class InitialConditionsPanel(QGroupBox):
@@ -167,10 +167,10 @@ class InitialConditionsPanel(QGroupBox):
         if self.cbox.isChecked():
             grid = Grid(
                 cells=np.random.randint(
-                    0, 2, (int(self._world._height), int(self._world._width))
+                    0, 2, (int(self._world.height), int(self._world.width))
                 )
             )
-            self._world.set_grid(grid)
+            self._world.grid = grid
 
     def open_state(self):
         fname, _ = QFileDialog().getOpenFileName(self)
@@ -178,18 +178,16 @@ class InitialConditionsPanel(QGroupBox):
             return
         cells = np.loadtxt(fname, dtype=int)
         grid = Grid(cells=cells)
-        self._world.set_grid(grid)
+        self._world.grid = grid
         self.cbox.setChecked(False)
         self.parent().parent().wp.height_box.setText(f"{grid.ny}")
         self.parent().parent().wp.width_box.setText(f"{grid.nx}")
 
     def create_state(self):
         if self._world._grid is None:
-            self._world.set_grid(
-                Grid(
-                    cells=np.zeros((int(self._world._height), int(self._world._width)))
+            self._world.grid = Grid(
+                    cells=np.zeros((int(self._world.height), int(self._world.width)))
                 )
-            )
         self.create_state_window = CreateStateWindow(self._world._grid)
 
 
@@ -229,9 +227,9 @@ class GameRulesPanel(QGroupBox):
         ):
             QMessageBox(text="Number of neighbours must be greater than or equal to 0.").exec()
         else:
-            self._world.set_rules(
-                [int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())]
-            )
+            self._world.rules = [
+                int(self.tbox1.text()), int(self.tbox2.text()), int(self.tbox3.text())
+            ]
 
     def _use_default_rules(self, val) -> None:
         self.tbox1.setEnabled(not val)
@@ -268,7 +266,7 @@ class MainWindow(QMainWindow):
         tp_sublayout = QHBoxLayout()
         tp_sublayout_wid = QWidget()
 
-        self.t_tbox = QLineEdit(f"{self.world._tick}")
+        self.t_tbox = QLineEdit(f"{self.world.tick}")
         self.t_tbox.editingFinished.connect(self._tick_changed)
         tp_sublayout.addWidget(QLabel("Set tick"))
         tp_sublayout.addWidget(self.t_tbox)
@@ -291,17 +289,17 @@ class MainWindow(QMainWindow):
         new_tick = float(self.t_tbox.text())
         if new_tick <= 0:
             QMessageBox(text="Tick length must be greater than 0.").exec()
-            self.t_tbox.setText(f"{self.world._tick}")
+            self.t_tbox.setText(f"{self.world.tick}")
         else:
-            self.world.set_tick(new_tick)
+            self.world.tick = new_tick
 
     def _play_clicked(self):
         print("Using the following settings:")
-        print(f"{self.world._height} height")
-        print(f"{self.world._width} width")
-        print(f"{self.world._bc} boundary conditions")
-        print(f"{self.world._rules} rules")
-        print(f"{self.world._tick} tick")
-        if self.world._grid is None:
+        print(f"{self.world.height} height")
+        print(f"{self.world.width} width")
+        print(f"{self.world.bc} boundary conditions")
+        print(f"{self.world.rules} rules")
+        print(f"{self.world.tick} tick")
+        if self.world.grid is None:
             print("No grid set")
         self.game_window = GameWindow(self.world)
