@@ -13,12 +13,20 @@ class Grid:
             # can't also specify nx and ny unless they are same as size of cells
             self._ny, self._nx = np.shape(cells)
 
+    @property
     def cells(self):
         return self._cells
 
+    @cells.setter
+    def cells(self, cells):
+        self._cells = cells
+        self._ny, self._nx = cells.shape
+
+    @property
     def nx(self):
         return self._nx
 
+    @property
     def ny(self):
         return self._ny
 
@@ -35,5 +43,4 @@ class Grid:
         self._cells.fill(0)
 
     def plot(self):
-        return plt.pcolor(self.cells(), cmap="binary")
-
+        return plt.pcolor(self.cells, cmap="binary")

@@ -35,7 +35,7 @@ class World:
     def set_grid(self, grid) -> None:
         self._grid = grid
         if grid is not None:
-            self._height, self._width = grid.ny(), grid.nx()
+            self._height, self._width = grid.ny, grid.nx
         else:
             self._height, self._width = None, None
 

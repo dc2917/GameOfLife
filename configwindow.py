@@ -43,7 +43,7 @@ class CreateStateWindow(QWidget):
     def _create_mpl_figure(self):
         plt.figure()
         ax = plt.axes(xticks=[], yticks=[])
-        self._im = ax.imshow(self._grid.cells(), cmap="binary", vmin=0, vmax=1)
+        self._im = ax.imshow(self._grid.cells, cmap="binary", vmin=0, vmax=1)
         self._canvas = FigureCanvasQTAgg(ax.figure)
         self._canvas.mpl_connect("button_press_event", self._on_canvas_clicked)
 
@@ -52,7 +52,7 @@ class CreateStateWindow(QWidget):
             data = self._im.get_array()
             j, i = int(event.xdata + 0.5), int(event.ydata + 0.5)
             data[i, j] = not data[i, j]
-            self._grid._cells[i, j] = not self._grid._cells[i, j]
+            self._grid.cells[i, j] = not self._grid.cells[i, j]
             self._im.set_array(data)
             event.canvas.draw()
 
@@ -64,7 +64,7 @@ class CreateStateWindow(QWidget):
 
     def _reset_clicked(self):
         self._grid.clear()
-        self._im.set_array(self._grid.cells())
+        self._im.set_array(self._grid.cells)
         self._canvas.draw()
 
     def closeEvent(self, event):
@@ -115,11 +115,11 @@ class WorldPropertiesPanel(QGroupBox):
         else:
             self._world.set_height(new_height)
             if self._world._grid is not None:
-                if self._world._grid._ny != new_height:
-                    self._world._grid._cells = np.zeros(
+                if self._world._grid.ny != new_height:
+                    self._world._grid.cells = np.zeros(
                         (new_height, int(self._world._width))
                     )
-                    self._world._grid._ny = new_height
+                    self._world._grid.ny = new_height
 
     def _width_changed(self):
         new_width = int(self.width_box.text())
@@ -129,11 +129,11 @@ class WorldPropertiesPanel(QGroupBox):
         else:
             self._world.set_width(new_width)
             if self._world._grid is not None:
-                if self._world._grid._nx != new_width:
-                    self._world._grid._cells = np.zeros(
+                if self._world._grid.nx != new_width:
+                    self._world._grid.cells = np.zeros(
                         (int(self._world._height), new_width)
                     )
-                    self._world._grid._nx = new_width
+                    self._world._grid.nx = new_width
 
     def _bc_changed(self):
         self._world.set_bc(self.bc_box.currentText())
@@ -180,8 +180,8 @@ class InitialConditionsPanel(QGroupBox):
         grid = Grid(cells=cells)
         self._world.set_grid(grid)
         self.cbox.setChecked(False)
-        self.parent().parent().wp.height_box.setText(f"{grid._ny}")
-        self.parent().parent().wp.width_box.setText(f"{grid._nx}")
+        self.parent().parent().wp.height_box.setText(f"{grid.ny}")
+        self.parent().parent().wp.width_box.setText(f"{grid.nx}")
 
     def create_state(self):
         if self._world._grid is None:
@@ -305,6 +305,3 @@ class MainWindow(QMainWindow):
         if self.world._grid is None:
             print("No grid set")
         self.game_window = GameWindow(self.world)
-
-    def _close_gui():
-        print("closing")
