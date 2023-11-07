@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from numpy.typing import NDArray
 
 class Grid:
-    def __init__(self, cells=None, nx=0, ny=0):
+    def __init__(self, cells: NDArray[np.float64 | np.int64] = None, nx: int = 0, ny: int = 0) -> None:
         if cells is None:
             self._cells = np.zeros([ny, nx])
             self._nx = nx
@@ -14,32 +14,32 @@ class Grid:
             self._ny, self._nx = np.shape(cells)
 
     @property
-    def cells(self):
+    def cells(self) -> NDArray[np.float64 | np.int64]:
         return self._cells
 
     @cells.setter
-    def cells(self, cells):
+    def cells(self, cells: NDArray[np.float64 | np.int64]) -> None:
         self._cells = cells
         self._ny, self._nx = cells.shape
 
     @property
-    def nx(self):
+    def nx(self) -> int:
         return self._nx
 
     @property
-    def ny(self):
+    def ny(self) -> int:
         return self._ny
 
-    def num_alive(self):
+    def num_alive(self) -> int:
         return np.sum(self._cells == 1)
 
-    def num_dead(self):
+    def num_dead(self) -> int:
         return np.sum(self._cells == 0)
 
-    def binarise(self, threshold=0.66):
+    def binarise(self, threshold: float = 0.66) -> None:
         self._cells = np.where(self._cells < threshold, 0, 1)
 
-    def clear(self):
+    def clear(self) -> None:
         self._cells.fill(0)
 
     def plot(self):

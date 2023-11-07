@@ -1,16 +1,17 @@
 import numpy as np
 from grid import Grid
+from numpy.typing import NDArray
 
 class World:
     def __init__(
         self,
-        height=1,
-        width=1,
-        bc="Hard wall",
-        seed=None,
-        grid=None,
-        rules=[2, 3, 3],
-        tick=0.1,
+        height: int = 1,
+        width: int = 1,
+        bc: str = "Hard wall",
+        seed: NDArray[np.float64 | np.int64] = None,
+        grid: NDArray[np.float64 | np.int64] = None,
+        rules: list[int] = [2, 3, 3],
+        tick: float | int = 0.1,
     ) -> None:
         self._bc = bc
         self._seed = seed
@@ -26,7 +27,7 @@ class World:
         return self._height
 
     @height.setter
-    def height(self, height) -> None:
+    def height(self, height: int) -> None:
         self._height = height
 
     @property
@@ -34,7 +35,7 @@ class World:
         return self._width
 
     @width.setter
-    def width(self, width) -> None:
+    def width(self, width: int) -> None:
         self._width = width
 
     @property
@@ -42,23 +43,23 @@ class World:
         return self._bc
 
     @bc.setter
-    def bc(self, bc) -> None:
+    def bc(self, bc: str) -> None:
         self._bc = bc
 
     @property
-    def seed(self) -> None:
+    def seed(self) -> NDArray[np.float64 | np.int64]:
         return self._seed
 
     @seed.setter
-    def seed(self, seed) -> None:
+    def seed(self, seed: NDArray[np.float64 | np.int64]) -> None:
         self._seed = seed
 
     @property
-    def grid(self) -> None:
+    def grid(self) -> NDArray[np.float64 | np.int64]:
         return self._grid
 
     @grid.setter
-    def grid(self, grid) -> None:
+    def grid(self, grid: NDArray[np.float64 | np.int64]) -> None:
         self._grid = grid
         if grid is not None:
             self._height, self._width = grid.ny, grid.nx
@@ -70,7 +71,7 @@ class World:
         return self._rules
 
     @rules.setter
-    def rules(self, rules) -> None:
+    def rules(self, rules: list[str]) -> None:
         self._rules = rules
 
     @property
@@ -78,10 +79,10 @@ class World:
         return self._tick
 
     @tick.setter
-    def tick(self, tick) -> None:
+    def tick(self, tick: float | int) -> None:
         self._tick = tick
 
-    def outcome(self, is_alive, num_live_neighbours):
+    def outcome(self, is_alive: bool, num_live_neighbours: int) -> int:
         if is_alive:
             if num_live_neighbours == self._rules[0] or num_live_neighbours == self._rules[1]:
                 return 1
@@ -93,5 +94,5 @@ class World:
             else:
                 return 0
 
-    def count_live_neighbours(self, neighbourhood):
+    def count_live_neighbours(self, neighbourhood: NDArray[np.float64 | np.int64]) -> int:
         return np.sum(neighbourhood) - neighbourhood[1, 1]

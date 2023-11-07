@@ -3,21 +3,23 @@ from PyQt6.QtWidgets import QWidget
 import matplotlib.pyplot as plt
 import numpy as np
 
+from world import World
+
 class GameWindow(QWidget):
-    def __init__(self, world):
+    def __init__(self, world: World) -> None:
         super().__init__()
         self._world = world
         self._create_mpl_figure()
         self.run()
 
-    def _create_mpl_figure(self):
+    def _create_mpl_figure(self) -> None:
         plt.figure()
         ax = plt.axes(xticks=[], yticks=[])
         ax.figure.canvas.manager.set_window_title("Game of Life")
         ax.figure.canvas.manager.toolbar.hide()
         self._im = ax.imshow(self._world.grid.cells, cmap="binary", vmin=0, vmax=1)
 
-    def run(self):
+    def run(self) -> None:
         ni, nj = self._world.height, self._world.width
         world = np.zeros((ni+2, nj+2), dtype=int)
         plt.pause(self._world.tick)

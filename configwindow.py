@@ -24,7 +24,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
 
 class CreateStateWindow(QWidget):
-    def __init__(self, grid):
+    def __init__(self, grid: Grid) -> None:
         super().__init__()
         self.setWindowTitle("Create initial state")
         self._grid = grid
@@ -40,14 +40,14 @@ class CreateStateWindow(QWidget):
         self.setLayout(layout)
         self.show()
 
-    def _create_mpl_figure(self):
+    def _create_mpl_figure(self) -> None:
         plt.figure()
         ax = plt.axes(xticks=[], yticks=[])
         self._im = ax.imshow(self._grid.cells, cmap="binary", vmin=0, vmax=1)
         self._canvas = FigureCanvasQTAgg(ax.figure)
         self._canvas.mpl_connect("button_press_event", self._on_canvas_clicked)
 
-    def _on_canvas_clicked(self, event):
+    def _on_canvas_clicked(self, event) -> None:
         if event.inaxes is self._im.axes:
             data = self._im.get_array()
             j, i = int(event.xdata + 0.5), int(event.ydata + 0.5)
@@ -56,23 +56,23 @@ class CreateStateWindow(QWidget):
             self._im.set_array(data)
             event.canvas.draw()
 
-    def _save_clicked(self):
+    def _save_clicked(self) -> None:
         fname, _ = QFileDialog().getSaveFileName(self)
         if fname == "":
             return
         np.savetxt(fname, self._im.get_array(), fmt="%d")
 
-    def _reset_clicked(self):
+    def _reset_clicked(self) -> None:
         self._grid.clear()
         self._im.set_array(self._grid.cells)
         self._canvas.draw()
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         plt.close()
 
 
 class WorldPropertiesPanel(QGroupBox):
-    def __init__(self, world):
+    def __init__(self, world: World) -> None:
         super().__init__("World Properties")
         self._world = world
 
@@ -107,7 +107,7 @@ class WorldPropertiesPanel(QGroupBox):
 
         self.setLayout(layout)
 
-    def _height_changed(self):
+    def _height_changed(self) -> None:
         new_height = int(self.height_box.text())
         if new_height <= 0:
             QMessageBox(text="Height must be greater than 0.").exec()
@@ -121,7 +121,7 @@ class WorldPropertiesPanel(QGroupBox):
                     )
                     self._world.grid.ny = new_height
 
-    def _width_changed(self):
+    def _width_changed(self) -> None:
         new_width = int(self.width_box.text())
         if new_width <= 0:
             QMessageBox(text="Width must be greater than 0.").exec()
@@ -135,12 +135,12 @@ class WorldPropertiesPanel(QGroupBox):
                     )
                     self._world.grid.nx = new_width
 
-    def _bc_changed(self):
+    def _bc_changed(self) -> None:
         self._world.bc = self.bc_box.currentText()
 
 
 class InitialConditionsPanel(QGroupBox):
-    def __init__(self, world):
+    def __init__(self, world: World) -> None:
         super().__init__("Initial Conditions")
         self._world = world
 
@@ -163,7 +163,7 @@ class InitialConditionsPanel(QGroupBox):
 
         self.setLayout(layout)
 
-    def _random_state_toggled(self):
+    def _random_state_toggled(self) -> None:
         if self.cbox.isChecked():
             grid = Grid(
                 cells=np.random.randint(
@@ -172,7 +172,7 @@ class InitialConditionsPanel(QGroupBox):
             )
             self._world.grid = grid
 
-    def open_state(self):
+    def open_state(self) -> None:
         fname, _ = QFileDialog().getOpenFileName(self)
         if fname == "":
             return
@@ -183,7 +183,7 @@ class InitialConditionsPanel(QGroupBox):
         self.parent().parent().wp.height_box.setText(f"{grid.ny}")
         self.parent().parent().wp.width_box.setText(f"{grid.nx}")
 
-    def create_state(self):
+    def create_state(self) -> None:
         if self._world._grid is None:
             self._world.grid = Grid(
                     cells=np.zeros((int(self._world.height), int(self._world.width)))
@@ -192,7 +192,7 @@ class InitialConditionsPanel(QGroupBox):
 
 
 class GameRulesPanel(QGroupBox):
-    def __init__(self, world):
+    def __init__(self, world: World) -> None:
         super().__init__("Game Rules")
         self._world = world
 
@@ -219,7 +219,7 @@ class GameRulesPanel(QGroupBox):
 
         self.setLayout(layout)
 
-    def _rules_changed(self):
+    def _rules_changed(self) -> None:
         if (
             int(self.tbox1.text()) <= 0
             or int(self.tbox2.text()) <= 0
@@ -243,7 +243,7 @@ class GameRulesPanel(QGroupBox):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Game of Life setup")
         self.resize(600, 400)
@@ -285,7 +285,7 @@ class MainWindow(QMainWindow):
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
-    def _tick_changed(self):
+    def _tick_changed(self) -> None:
         new_tick = float(self.t_tbox.text())
         if new_tick <= 0:
             QMessageBox(text="Tick length must be greater than 0.").exec()
@@ -293,7 +293,7 @@ class MainWindow(QMainWindow):
         else:
             self.world.tick = new_tick
 
-    def _play_clicked(self):
+    def _play_clicked(self) -> None:
         print("Using the following settings:")
         print(f"{self.world.height} height")
         print(f"{self.world.width} width")
