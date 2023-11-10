@@ -24,7 +24,13 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
 
 class CreateStateWindow(QWidget):
+    """A window for creating the initial state in Game of Life."""
     def __init__(self, grid: Grid) -> None:
+        """Create a new state creation window.
+
+        Args:
+            grid: the grid to use for the initial state.
+        """
         super().__init__()
         self.setWindowTitle("Create initial state")
         self._grid = grid
@@ -41,6 +47,7 @@ class CreateStateWindow(QWidget):
         self.show()
 
     def _create_mpl_figure(self) -> None:
+        """Create the matplotlib figure for creating the state."""
         plt.figure()
         ax = plt.axes(xticks=[], yticks=[])
         self._im = ax.imshow(self._grid.cells, cmap="binary", vmin=0, vmax=1)
@@ -48,6 +55,7 @@ class CreateStateWindow(QWidget):
         self._canvas.mpl_connect("button_press_event", self._on_canvas_clicked)
 
     def _on_canvas_clicked(self, event) -> None:
+        """To be executed when a grid cell is de/selected."""
         if event.inaxes is self._im.axes:
             data = self._im.get_array()
             j, i = int(event.xdata + 0.5), int(event.ydata + 0.5)
@@ -57,22 +65,31 @@ class CreateStateWindow(QWidget):
             event.canvas.draw()
 
     def _save_clicked(self) -> None:
+        """Save the current state to file."""
         fname, _ = QFileDialog().getSaveFileName(self)
         if fname == "":
             return
         np.savetxt(fname, self._im.get_array(), fmt="%d")
 
     def _reset_clicked(self) -> None:
+        """Reset to a clean state with all cells deselected."""
         self._grid.clear()
         self._im.set_array(self._grid.cells)
         self._canvas.draw()
 
     def closeEvent(self, event) -> None:
+        """Close the matplotlib figure for creating the state."""
         plt.close()
 
 
 class WorldPropertiesPanel(QGroupBox):
+    """A panel for setting the world properties."""
     def __init__(self, world: World) -> None:
+        """Create a new panel for setting the world properties.
+
+        Args:
+            world: the world whose properties are being set.
+        """
         super().__init__("World Properties")
         self._world = world
 
@@ -108,6 +125,7 @@ class WorldPropertiesPanel(QGroupBox):
         self.setLayout(layout)
 
     def _height_changed(self) -> None:
+        """To be executed when the world height is changed."""
         new_height = int(self.height_box.text())
         if new_height <= 0:
             QMessageBox(text="Height must be greater than 0.").exec()
@@ -122,6 +140,7 @@ class WorldPropertiesPanel(QGroupBox):
                     self._world.ic.ny = new_height
 
     def _width_changed(self) -> None:
+        """To be executed when the world width is changed."""
         new_width = int(self.width_box.text())
         if new_width <= 0:
             QMessageBox(text="Width must be greater than 0.").exec()
@@ -136,11 +155,18 @@ class WorldPropertiesPanel(QGroupBox):
                     self._world.ic.nx = new_width
 
     def _bc_changed(self) -> None:
+        """To be executed when the world boundary conditions are changed."""
         self._world.bc = self.bc_box.currentText()
 
 
 class InitialConditionsPanel(QGroupBox):
+    """A panel for setting the worlds' initial conditions."""
     def __init__(self, world: World) -> None:
+        """Create a new panel for setting the world's initial conditions.
+
+        Args:
+            world: the world whose initial conditions are being set.
+        """
         super().__init__("Initial Conditions")
         self._world = world
 
@@ -164,6 +190,7 @@ class InitialConditionsPanel(QGroupBox):
         self.setLayout(layout)
 
     def _random_state_toggled(self) -> None:
+        """To be executed when the random state checkbox is un/checked."""
         if self.cbox.isChecked():
             grid = Grid(
                 cells=np.random.randint(
@@ -173,6 +200,7 @@ class InitialConditionsPanel(QGroupBox):
             self._world.ic = grid
 
     def open_state(self) -> None:
+        """Open a saved state from file."""
         fname, _ = QFileDialog().getOpenFileName(self)
         if fname == "":
             return
@@ -184,6 +212,7 @@ class InitialConditionsPanel(QGroupBox):
         self.parent().parent().wp.width_box.setText(f"{grid.nx}")
 
     def create_state(self) -> None:
+        """Manually create a new state."""
         if self._world.ic is None:
             self._world.ic = Grid(
                     cells=np.zeros((int(self._world.height), int(self._world.width)))
@@ -192,7 +221,13 @@ class InitialConditionsPanel(QGroupBox):
 
 
 class GameRulesPanel(QGroupBox):
+    """A panel for setting the game rules."""
     def __init__(self, world: World) -> None:
+        """Create a new panel for setting the game rules.
+
+        Args:
+            world: the world in the game whose rules are being set.
+        """
         super().__init__("Game Rules")
         self._world = world
 
@@ -220,6 +255,7 @@ class GameRulesPanel(QGroupBox):
         self.setLayout(layout)
 
     def _rules_changed(self) -> None:
+        """To be executed when the rules are changed."""
         if (
             int(self.tbox1.text()) <= 0
             or int(self.tbox2.text()) <= 0
@@ -232,6 +268,7 @@ class GameRulesPanel(QGroupBox):
             ]
 
     def _use_default_rules(self, val) -> None:
+        """Use the default Game of Life rules."""
         self.tbox1.setEnabled(not val)
         self.tbox2.setEnabled(not val)
         self.tbox3.setEnabled(not val)
@@ -243,7 +280,9 @@ class GameRulesPanel(QGroupBox):
 
 
 class MainWindow(QMainWindow):
+    """The main window for configuring Game of Life."""
     def __init__(self) -> None:
+        """Create a new main window."""
         super().__init__()
         self.setWindowTitle("Game of Life setup")
         self.resize(600, 400)
@@ -286,6 +325,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(widget)
 
     def _tick_changed(self) -> None:
+        """To be executed when the tick is changed."""
         new_tick = float(self.t_tbox.text())
         if new_tick <= 0:
             QMessageBox(text="Tick length must be greater than 0.").exec()
@@ -294,6 +334,7 @@ class MainWindow(QMainWindow):
             self.world.tick = new_tick
 
     def _play_clicked(self) -> None:
+        """Begin the Game of Life."""
         print("Using the following settings:")
         print(f"{self.world.height} height")
         print(f"{self.world.width} width")

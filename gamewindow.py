@@ -6,7 +6,9 @@ from grid import Grid
 from world import World
 
 class GameWindow(QWidget):
+    """A window for displaying a Game of Life simulation."""
     def __init__(self, world: World) -> None:
+        """Create a new game window."""
         super().__init__()
         self._world = world
         self._world.grid = Grid(world.ic.cells.copy())
@@ -14,6 +16,7 @@ class GameWindow(QWidget):
         self.run()
 
     def _create_mpl_figure(self) -> None:
+        """Create the matplotlib figure for showing the grid cells."""
         plt.figure()
         ax = plt.axes(xticks=[], yticks=[])
         ax.figure.canvas.manager.set_window_title("Game of Life")
@@ -21,6 +24,7 @@ class GameWindow(QWidget):
         self._im = ax.imshow(self._world.grid.cells, cmap="binary", vmin=0, vmax=1)
 
     def run(self) -> None:
+        """Run the main loop for Game of Life."""
         ni, nj = self._world.height, self._world.width
         world = np.zeros((ni+2, nj+2), dtype=int)
         plt.pause(self._world.tick)
