@@ -2,13 +2,14 @@ from PyQt6.QtWidgets import QWidget
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+from grid import Grid
 from world import World
 
 class GameWindow(QWidget):
     def __init__(self, world: World) -> None:
         super().__init__()
         self._world = world
+        self._world.grid = Grid(world.ic.cells.copy())
         self._create_mpl_figure()
         self.run()
 

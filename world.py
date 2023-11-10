@@ -8,13 +8,13 @@ class World:
         height: int = 1,
         width: int = 1,
         bc: str = "Hard wall",
-        seed: NDArray[np.float64 | np.int64] = None,
+        ic: NDArray[np.float64 | np.int64] = None,
         grid: NDArray[np.float64 | np.int64] = None,
         rules: list[int] = [2, 3, 3],
         tick: float | int = 0.1,
     ) -> None:
         self._bc = bc
-        self._seed = seed
+        self._ic = ic
         self._rules = rules
         self._tick = tick
         self._grid = grid
@@ -47,12 +47,12 @@ class World:
         self._bc = bc
 
     @property
-    def seed(self) -> NDArray[np.float64 | np.int64]:
-        return self._seed
+    def ic(self) -> NDArray[np.float64 | np.int64]:
+        return self._ic
 
-    @seed.setter
-    def seed(self, seed: NDArray[np.float64 | np.int64]) -> None:
-        self._seed = seed
+    @ic.setter
+    def ic(self, grid: NDArray[np.float64 | np.int64]) -> None:
+        self._ic = grid
 
     @property
     def grid(self) -> NDArray[np.float64 | np.int64]:

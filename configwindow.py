@@ -114,12 +114,12 @@ class WorldPropertiesPanel(QGroupBox):
             self.height_box.setText(f"{self._world.height}")
         else:
             self._world.height = new_height
-            if self._world.grid is not None:
-                if self._world.grid.ny != new_height:
-                    self._world.grid.cells = np.zeros(
+            if self._world.ic is not None:
+                if self._world.ic.ny != new_height:
+                    self._world.ic.cells = np.zeros(
                         (new_height, int(self._world.width))
                     )
-                    self._world.grid.ny = new_height
+                    self._world.ic.ny = new_height
 
     def _width_changed(self) -> None:
         new_width = int(self.width_box.text())
@@ -128,12 +128,12 @@ class WorldPropertiesPanel(QGroupBox):
             self.width_box.setText(f"{self._world.width}")
         else:
             self._world.width = new_width
-            if self._world.grid is not None:
-                if self._world.grid.nx != new_width:
-                    self._world.grid.cells = np.zeros(
+            if self._world.ic is not None:
+                if self._world.ic.nx != new_width:
+                    self._world.ic.cells = np.zeros(
                         (int(self._world.height), new_width)
                     )
-                    self._world.grid.nx = new_width
+                    self._world.ic.nx = new_width
 
     def _bc_changed(self) -> None:
         self._world.bc = self.bc_box.currentText()
@@ -170,7 +170,7 @@ class InitialConditionsPanel(QGroupBox):
                     0, 2, (int(self._world.height), int(self._world.width))
                 )
             )
-            self._world.grid = grid
+            self._world.ic = grid
 
     def open_state(self) -> None:
         fname, _ = QFileDialog().getOpenFileName(self)
@@ -178,17 +178,17 @@ class InitialConditionsPanel(QGroupBox):
             return
         cells = np.loadtxt(fname, dtype=int)
         grid = Grid(cells=cells)
-        self._world.grid = grid
+        self._world.ic = grid
         self.cbox.setChecked(False)
         self.parent().parent().wp.height_box.setText(f"{grid.ny}")
         self.parent().parent().wp.width_box.setText(f"{grid.nx}")
 
     def create_state(self) -> None:
-        if self._world._grid is None:
-            self._world.grid = Grid(
+        if self._world.ic is None:
+            self._world.ic = Grid(
                     cells=np.zeros((int(self._world.height), int(self._world.width)))
                 )
-        self.create_state_window = CreateStateWindow(self._world._grid)
+        self.create_state_window = CreateStateWindow(self._world.ic)
 
 
 class GameRulesPanel(QGroupBox):
@@ -300,6 +300,6 @@ class MainWindow(QMainWindow):
         print(f"{self.world.bc} boundary conditions")
         print(f"{self.world.rules} rules")
         print(f"{self.world.tick} tick")
-        if self.world.grid is None:
+        if self.world.ic is None:
             print("No grid set")
         self.game_window = GameWindow(self.world)
