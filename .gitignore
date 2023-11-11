@@ -1,0 +1,10 @@
+# Emacs backup files
+*~
+*#
+
+# Virtual environment
+.venv/
+
+__pycache__/
+
+docs/build/
