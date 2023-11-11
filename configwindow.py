@@ -1,3 +1,4 @@
+import pdb
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QMainWindow,
@@ -18,6 +19,7 @@ from PyQt6.QtWidgets import (
 from grid import Grid
 from world import World
 from gamewindow import GameWindow
+from helpwindow import HelpWindow
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -295,9 +297,12 @@ class MainWindow(QMainWindow):
         self.ic = InitialConditionsPanel(self.world)
         self.gr = GameRulesPanel(self.world)
 
-        layout.addWidget(self.wp, 0, 0)
-        layout.addWidget(self.ic, 0, 1)
-        layout.addWidget(self.gr, 1, 0)
+        h_btn = QPushButton("Help")
+        h_btn.clicked.connect(self._help_clicked)
+        layout.addWidget(h_btn, 0, 2)
+        layout.addWidget(self.wp, 1, 0)
+        layout.addWidget(self.ic, 1, 1, 1, 2)
+        layout.addWidget(self.gr, 2, 0)
 
         # Create final subframe with tick length and play button
         tp_layout = QVBoxLayout()
@@ -318,7 +323,7 @@ class MainWindow(QMainWindow):
         tp_layout.addWidget(p_btn)
 
         tp_layout_wid.setLayout(tp_layout)
-        layout.addWidget(tp_layout_wid, 1, 1)
+        layout.addWidget(tp_layout_wid, 2, 1, 1, 2)
 
         widget = QWidget()
         widget.setLayout(layout)
@@ -332,6 +337,10 @@ class MainWindow(QMainWindow):
             self.t_tbox.setText(f"{self.world.tick}")
         else:
             self.world.tick = new_tick
+
+    def _help_clicked(self) -> None:
+        self.help_window = HelpWindow()
+        self.help_window.show()
 
     def _play_clicked(self) -> None:
         """Begin the Game of Life."""
