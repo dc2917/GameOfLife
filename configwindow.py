@@ -139,7 +139,6 @@ class WorldPropertiesPanel(QGroupBox):
                     self._world.ic.cells = np.zeros(
                         (new_height, int(self._world.width))
                     )
-                    self._world.ic.ny = new_height
 
     def _width_changed(self) -> None:
         """To be executed when the world width is changed."""
@@ -154,7 +153,6 @@ class WorldPropertiesPanel(QGroupBox):
                     self._world.ic.cells = np.zeros(
                         (int(self._world.height), new_width)
                     )
-                    self._world.ic.nx = new_width
 
     def _bc_changed(self) -> None:
         """To be executed when the world boundary conditions are changed."""
