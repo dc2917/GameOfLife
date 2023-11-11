@@ -6,8 +6,8 @@ class World:
     """The world in which the Game of Life is played."""
     def __init__(
         self,
-        height: int = 1,
-        width: int = 1,
+        height: int = 10,
+        width: int = 10,
         bc: str = "Hard wall",
         ic: NDArray[np.float64 | np.int64] = None,
         grid: NDArray[np.float64 | np.int64] = None,
