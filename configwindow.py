@@ -1,4 +1,5 @@
 import pdb
+from PyQt6.QtGui import QAction
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QMainWindow,
@@ -14,6 +15,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QPushButton,
     QFileDialog,
+    QMenu
 )
 
 from grid import Grid
@@ -295,12 +297,17 @@ class MainWindow(QMainWindow):
         self.ic = InitialConditionsPanel(self.world)
         self.gr = GameRulesPanel(self.world)
 
-        h_btn = QPushButton("Help")
-        h_btn.clicked.connect(self._help_clicked)
-        layout.addWidget(h_btn, 0, 2)
-        layout.addWidget(self.wp, 1, 0)
-        layout.addWidget(self.ic, 1, 1, 1, 2)
-        layout.addWidget(self.gr, 2, 0)
+        menubar = self.menuBar()
+        helpmenu = QMenu("Help", self)
+        helpaction = QAction("Open user guide", self)
+        helpaction.triggered.connect(self._help_clicked)
+        helpmenu.addAction(helpaction)
+        menubar.addMenu(helpmenu)
+        self.setMenuBar(menubar)
+
+        layout.addWidget(self.wp, 0, 0)
+        layout.addWidget(self.ic, 0, 1)
+        layout.addWidget(self.gr, 1, 0)
 
         # Create final subframe with tick length and play button
         tp_layout = QVBoxLayout()
@@ -321,7 +328,7 @@ class MainWindow(QMainWindow):
         tp_layout.addWidget(p_btn)
 
         tp_layout_wid.setLayout(tp_layout)
-        layout.addWidget(tp_layout_wid, 2, 1, 1, 2)
+        layout.addWidget(tp_layout_wid, 1, 1)
 
         widget = QWidget()
         widget.setLayout(layout)
