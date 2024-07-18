@@ -83,7 +83,7 @@ pillow==10.1.0
     # via matplotlib
 pip-tools==7.3.0
     # via GameOfLife (pyproject.toml)
-platformdirs==3.11.0
+platformdirs==4.2.2
     # via
     #   black
     #   virtualenv
