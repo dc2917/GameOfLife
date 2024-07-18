@@ -147,7 +147,7 @@ sphinxcontrib-qthelp==1.0.6
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.9
     # via sphinx
-typing-extensions==4.8.0
+typing-extensions==4.12.2
     # via mypy
 urllib3==2.1.0
     # via requests
