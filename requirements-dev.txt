@@ -89,7 +89,7 @@ platformdirs==3.11.0
     #   virtualenv
 pre-commit==3.5.0
     # via GameOfLife (pyproject.toml)
-pycodestyle==2.11.1
+pycodestyle==2.12.0
     # via flake8
 pydocstyle==6.3.0
     # via flake8-docstrings
